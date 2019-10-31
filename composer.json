@@ -1,0 +1,29 @@
+{
+    "name": "futape/filesystem-utility",
+    "description": "",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+      "php": "~7.2.0",
+      "futape/array-utility": "@dev",
+      "futape/string-utility": "@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    },
+    "autoload": {
+      "psr-4": {
+        "Futape\\Utility\\Filesystem\\": "src/"
+      }
+    },
+    "repositories": [
+      {
+        "type": "path",
+        "url": "../utility-string"
+      },
+      {
+        "type": "path",
+        "url": "../array-utility"
+      }
+    ]
+}
