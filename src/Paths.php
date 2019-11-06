@@ -59,4 +59,35 @@ abstract class Paths
 
         return $normalized;
     }
+
+    /**
+     * Strips off a path from the beginning of another path
+     *
+     * The returned path gets normalized.
+     * If $path begins with a '.' or a '..' path segment or is an absolute path, the resulting path will begin
+     * with a '.' path segment (if $start matches).
+     *
+     * @see self::normalize()
+     *
+     * @param string|string[]|string[][] $path Passed to self::normalize()
+     * @param string|string[]|string[][] $start Passed to self::normalize()
+     * @return string
+     */
+    public static function strip($path, $start): string
+    {
+        $path = self::normalize($path);
+        $start = rtrim(self::normalize($start), '/');
+        $strippedPath = $path;
+
+        if ($start == $path || $start . '/' == $path) {
+            $strippedPath = '';
+        } elseif (Strings::startsWith($path, $start . '/')) {
+            $strippedPath = Strings::stripLeft($path, $start . '/');
+            if (Strings::startsWith($path, ['./', '../', '/'])) {
+                $strippedPath = './' . $strippedPath;
+            }
+        }
+
+        return self::normalize($strippedPath);
+    }
 }

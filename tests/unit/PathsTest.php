@@ -20,15 +20,6 @@ class PathsTest extends TestCase
         $this->assertEquals($expected, Paths::normalize(...$input));
     }
 
-    public function testNormalizeSystemDirectorySeparator()
-    {
-        if (DIRECTORY_SEPARATOR == '/') {
-            $this->markTestSkipped('The system directory separator must not be "/" for this test to work');
-        }
-
-        $this->assertEquals('foo/bar', Paths::normalize('foo' . DIRECTORY_SEPARATOR . 'bar'));
-    }
-
     public function normalizeDataProvider(): array
     {
         return [
@@ -56,6 +47,44 @@ class PathsTest extends TestCase
                 ['foo/..'],
                 '.'
             ]
+        ];
+    }
+
+    public function testNormalizeSystemDirectorySeparator()
+    {
+        if (DIRECTORY_SEPARATOR == '/') {
+            $this->markTestSkipped('The system directory separator must not be "/" for this test to work');
+        }
+
+        $this->assertEquals('foo/bar', Paths::normalize('foo' . DIRECTORY_SEPARATOR . 'bar'));
+    }
+
+    /**
+     * @dataProvider stripDataProvider
+     *
+     * @param array $input
+     * @param string $expected
+     */
+    public function testStrip(array $input, string $expected)
+    {
+        $this->assertEquals($expected, Paths::strip(...$input));
+    }
+
+    public function stripDataProvider(): array
+    {
+        return [
+            'Basic usage' => [
+                ['foo/bar/baz', 'foo'],
+                'bar/baz'
+            ],
+            'Without trailing directory separator' => [
+                ['foo/bar', 'foo/bar/'],
+                '.'
+            ],
+            'Path begins with "." or ".." path segment or is absolute' => [
+                ['/foo/bar/baz', '/foo'],
+                './bar/baz'
+            ],
         ];
     }
 }
