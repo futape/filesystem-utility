@@ -14,7 +14,7 @@ abstract class Paths
      * Does a similar task like realpath(), with the exception that the underlying filesystem doesn't has any impact
      * nor is it required at all.
      *
-     * + Any platform-specific path seperator is replaced by a '/' character
+     * + Any platform-specific path separator is replaced by a '/' character
      * + Multiple subsequent '/' characters collapse to a single one
      * + '.' path segments (except for the first path segment) are removed
      * + '..' path segments (except for the first path segment) are removed together with their leading ones
@@ -50,7 +50,7 @@ abstract class Paths
                 PREG_OFFSET_CAPTURE
             ) === 1
         ) {
-            $normalized = Strings::supstr($normalized, $matches[0][1], strlen($matches[0][1]), false);
+            $normalized = Strings::supstr($normalized, $matches[0][1], strlen($matches[0][0]), false);
         }
 
         if ($normalized == '') {
