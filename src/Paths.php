@@ -8,6 +8,26 @@ use Futape\Utility\String\Strings;
 
 abstract class Paths
 {
+    /** @var string|null */
+    protected static $documentRoot;
+
+    /**
+     * @return string
+     */
+    public static function getDocumentRoot(): string
+    {
+        return self::$documentRoot ?? self::normalize($_SERVER['DOCUMENT_ROOT']);
+    }
+
+    /**
+     * @param string|null $documentRoot
+     * @return void
+     */
+    public static function setDocumentRoot(?string $documentRoot): void
+    {
+        self::$documentRoot = $documentRoot !== null ? self::normalize($documentRoot) : null;
+    }
+
     /**
      * Normalizes a path
      *
@@ -89,5 +109,46 @@ abstract class Paths
         }
 
         return self::normalize($strippedPath);
+    }
+
+    /**
+     * Builds a URL-path from a filesystem path
+     *
+     * Strips away the document root from the beginning of the path and fails with `null` if the path isn't a
+     * descendant of the document root.
+     * The URL path always has a leading slash and is normalized.
+     * If the path points to a directory, a slash is appended to the URL path.
+     * The single path segments are URL-encoded.
+     *
+     * @see self::normalize()
+     *
+     * @param $path
+     * @return string|null
+     */
+    public static function toUrlPath($path): ?string
+    {
+        $path = self::normalize($path);
+        $urlPath = self::strip($path, self::getDocumentRoot());
+
+        if ($urlPath == $path) {
+            // The path isn't a descendant of the document root
+            return null;
+        }
+
+        // Build URL path
+        if ($urlPath == '.') {
+            $urlPath = '';
+        }
+        $urlPath = '/' . Strings::stripLeft($urlPath, './');
+
+        // Append a slash if path points to a directory
+        if (is_dir($path) && !Strings::endsWith($urlPath, '/')) {
+            $urlPath .= '/';
+        }
+
+        // URL-encode path segments
+        $urlPath = implode('/', array_map('rawurlencode', explode('/', $urlPath)));
+
+        return $urlPath;
     }
 }
