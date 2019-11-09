@@ -112,7 +112,7 @@ abstract class Paths
     }
 
     /**
-     * Builds a URL-path from a filesystem path
+     * Builds a URL path from a filesystem path
      *
      * Strips away the document root from the beginning of the path and fails with `null` if the path isn't a
      * descendant of the document root.
@@ -150,5 +150,24 @@ abstract class Paths
         $urlPath = implode('/', array_map('rawurlencode', explode('/', $urlPath)));
 
         return $urlPath;
+    }
+
+    /**
+     * Builds a filesystem path from a URL path
+     *
+     * URL-decodes the path segments and prepends the document root.
+     * The returned path is normalized.
+     *
+     * @see self::normalize()
+     *
+     * @param string $urlPath
+     * @return string
+     */
+    public static function fromUrlPath(string $urlPath): string
+    {
+        $path = rawurldecode($urlPath);
+        $path = self::normalize(self::getDocumentRoot(), $path);
+
+        return $path;
     }
 }

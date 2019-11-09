@@ -122,4 +122,10 @@ class PathsTest extends TestCase
         $this->assertEquals('/bar/', Paths::toUrlPath(self::$documentRoot . 'bar'));
         rmdir(self::$documentRoot . 'bar');
     }
+
+    public function testFromUrlPath()
+    {
+        $this->assertEquals(self::$documentRoot . 'foo/bar.html', Paths::fromUrlPath('/foo/bar.html'));
+        $this->assertEquals(self::$documentRoot . 'fo?/ba#r.html', Paths::fromUrlPath('/fo%3F/ba%23r.html'));
+    }
 }
