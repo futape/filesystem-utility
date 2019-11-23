@@ -19,7 +19,6 @@ class PathsTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         $documentRoot = tempnam(sys_get_temp_dir(), 'pathtest');
-        var_dump($documentRoot);
         unlink($documentRoot);
         mkdir($documentRoot);
         Paths::setDocumentRoot($documentRoot);

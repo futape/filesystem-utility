@@ -122,7 +122,7 @@ abstract class Paths
      *
      * @see self::normalize()
      *
-     * @param $path
+     * @param string|string[]|string[][] $path Passed to self::normalize()
      * @return string|null
      */
     public static function toUrlPath($path): ?string
