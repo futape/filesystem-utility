@@ -3,7 +3,6 @@
 
 namespace Futape\Utility\Filesystem;
 
-use DirectoryIterator;
 use UnexpectedValueException;
 
 abstract class Files
@@ -55,14 +54,11 @@ abstract class Files
      */
     public static function cleanDirectory($path): bool
     {
-        $path = Paths::normalize($path);
         $success = true;
+        $directoryIterator = (new FilteredDirectoryIterator($path))
+            ->setDotFiles(false);
 
-        foreach (new DirectoryIterator($path) as $file) {
-            if ($file->isDot()) {
-                continue;
-            }
-
+        foreach ($directoryIterator as $file) {
             if (!self::remove($file->getPathname())) {
                 $success = false;
             }
