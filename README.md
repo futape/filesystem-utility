@@ -1,4 +1,4 @@
-# futape/string-utility
+# futape/filesystem-utility
 
 This library offers a set of utilities for working with the filesystem.
 
