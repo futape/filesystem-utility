@@ -5,7 +5,7 @@
   "license": "MIT",
   "require": {
     "php": "~7.2.0",
-    "futape/array-utility": "^1.0.0",
+    "futape/array-utility": "^2.0.0",
     "futape/string-utility": "^1.0.0"
   },
   "require-dev": {
