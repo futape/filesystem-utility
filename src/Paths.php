@@ -120,12 +120,13 @@ abstract class Paths
      * If the path points to a directory, a slash is appended to the URL path.
      * The single path segments are URL-encoded.
      *
+     * @param string|string[]|string[][] $path Passed to self::normalize()
+     * @param bool $trailingSlash
+     * @return string|null
      * @see self::normalize()
      *
-     * @param string|string[]|string[][] $path Passed to self::normalize()
-     * @return string|null
      */
-    public static function toUrlPath($path): ?string
+    public static function toUrlPath($path, bool $trailingSlash = true): ?string
     {
         $path = self::normalize($path);
         $urlPath = self::strip($path, self::getDocumentRoot());
@@ -142,8 +143,14 @@ abstract class Paths
         $urlPath = '/' . Strings::stripLeft($urlPath, './');
 
         // Append a slash if path points to a directory
-        if (is_dir($path) && !Strings::endsWith($urlPath, '/')) {
-            $urlPath .= '/';
+        if ($trailingSlash) {
+            if (is_dir($path) && !Strings::endsWith($urlPath, '/')) {
+                $urlPath .= '/';
+            }
+        } else {
+            if ($urlPath != '/') {
+                $urlPath = rtrim($urlPath, '/');
+            }
         }
 
         // URL-encode path segments
