@@ -122,11 +122,11 @@ abstract class Paths
      *
      * @param string|string[]|string[][] $path Passed to self::normalize()
      * @param bool $trailingSlash
+     * @param bool $urlencode
      * @return string|null
      * @see self::normalize()
-     *
      */
-    public static function toUrlPath($path, bool $trailingSlash = true): ?string
+    public static function toUrlPath($path, bool $trailingSlash = true, bool $urlencode = true): ?string
     {
         $path = self::normalize($path);
         $urlPath = self::strip($path, self::getDocumentRoot());
@@ -154,7 +154,9 @@ abstract class Paths
         }
 
         // URL-encode path segments
-        $urlPath = implode('/', array_map('rawurlencode', explode('/', $urlPath)));
+        if ($urlencode) {
+            $urlPath = implode('/', array_map('rawurlencode', explode('/', $urlPath)));
+        }
 
         return $urlPath;
     }

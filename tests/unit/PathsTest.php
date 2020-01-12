@@ -115,10 +115,12 @@ class PathsTest extends TestCase
     {
         $this->assertEquals('/foo/bar.html', Paths::toUrlPath(self::$documentRoot . 'foo/bar.html'));
         $this->assertEquals('/fo%3F/ba%23r/ba%26z', Paths::toUrlPath(self::$documentRoot . 'fo?/ba#r/ba&z'));
+        $this->assertEquals('/fo?/ba#r/ba&z', Paths::toUrlPath(self::$documentRoot . 'fo?/ba#r/ba&z', true, false));
         $this->assertNull(Paths::toUrlPath('/fake/foo/bar.html'));
 
         mkdir(self::$documentRoot . 'bar');
         $this->assertEquals('/bar/', Paths::toUrlPath(self::$documentRoot . 'bar'));
+        $this->assertEquals('/bar', Paths::toUrlPath(self::$documentRoot . 'bar/', false));
         rmdir(self::$documentRoot . 'bar');
     }
 
